@@ -363,6 +363,18 @@ export class ChatOpenAI extends OriginalChatOpenAI<t.ChatOpenAICallOptions> {
         chunk.additional_kwargs.provider_specific_fields =
           delta.provider_specific_fields;
       }
+      // Extract Perplexity citations and search_results from the response data
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const dataAny = data as any;
+      if ('citations' in dataAny && Array.isArray(dataAny.citations)) {
+        chunk.additional_kwargs.citations = dataAny.citations;
+      }
+      if (
+        'search_results' in dataAny &&
+        Array.isArray(dataAny.search_results)
+      ) {
+        chunk.additional_kwargs.search_results = dataAny.search_results;
+      }
       defaultRole = delta.role ?? defaultRole;
       const newTokenIndices = {
         prompt: options.promptIndex ?? 0,
@@ -687,6 +699,18 @@ export class ChatDeepSeek extends OriginalChatDeepSeek {
       );
       if ('reasoning_content' in delta) {
         chunk.additional_kwargs.reasoning_content = delta.reasoning_content;
+      }
+      // Extract Perplexity citations and search_results from the response data
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const dataAny = data as any;
+      if ('citations' in dataAny && Array.isArray(dataAny.citations)) {
+        chunk.additional_kwargs.citations = dataAny.citations;
+      }
+      if (
+        'search_results' in dataAny &&
+        Array.isArray(dataAny.search_results)
+      ) {
+        chunk.additional_kwargs.search_results = dataAny.search_results;
       }
       defaultRole = delta.role ?? defaultRole;
       const newTokenIndices = {

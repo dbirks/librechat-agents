@@ -149,6 +149,11 @@ export class StandardGraph extends Graph<t.BaseGraphState, t.GraphNode> {
   agentContexts: Map<string, AgentContext> = new Map();
   /** Default agent ID to use */
   defaultAgentId: string;
+  /** Perplexity citation URLs (extracted from streaming response) */
+  perplexityCitations: string[] | null = null;
+  /** Perplexity search results (extracted from streaming response) */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  perplexitySearchResults: any[] | null = null;
 
   constructor({
     // parent-level graph inputs

@@ -156,6 +156,27 @@ export class ChatModelStreamHandler implements t.EventHandler {
     const agentContext = graph.getAgentContext(metadata);
 
     const chunk = data.chunk as Partial<AIMessageChunk>;
+
+    // Extract Perplexity citations from streaming chunk if present
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const additionalKwargs = chunk.additional_kwargs as
+      | Record<string, any>
+      | undefined;
+    if (
+      additionalKwargs?.citations != null &&
+      Array.isArray(additionalKwargs.citations)
+    ) {
+      graph.perplexityCitations = additionalKwargs.citations as string[];
+    }
+    if (
+      additionalKwargs?.search_results != null &&
+      Array.isArray(additionalKwargs.search_results)
+    ) {
+      graph.perplexitySearchResults =
+        additionalKwargs.search_results as unknown[];
+    }
+    /* eslint-enable @typescript-eslint/no-explicit-any */
+
     const content = getChunkContent({
       chunk,
       reasoningKey: agentContext.reasoningKey,
